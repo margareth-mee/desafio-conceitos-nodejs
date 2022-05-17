@@ -46,11 +46,26 @@ app.post('/users', (request, response) => {
 });
 
 app.get('/todos', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const {user} = request;
+
+  response.status(200).json(user.todos);
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const {title, deadline} = request.body;
+  const {user} = request;
+
+  const todo = {
+    id: uuidv4(), // precisa ser um uuid
+	  title,
+	  done: false, 
+	  deadline: new Date(deadline), 
+	  created_at: new Date()
+  }
+  
+  user.todos.push(todo);
+
+  response.status(201).json(todo);
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
